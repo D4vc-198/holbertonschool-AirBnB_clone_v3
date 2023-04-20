@@ -1,45 +1,35 @@
 #!/usr/bin/python3
-""" endpoint (route) that will be return the status of your API """
-
-
-from flask import Flask
-from flask import make_response
-from flask import jsonify
+"""Script that starts a Flask app"""
+from flask import Flask, jsonify
+from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
-from os import getenv as get
-from flask_cors import CORS
+from os import getenv
 
-# create a variable appp, instance of flask
+
+"""Start Flask"""
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
-# register the blueprint app_views to your instance app
+"""Register the blueprint app_views"""
 app.register_blueprint(app_views)
+
+"""Create the CORS instance to allow IPs"""
+CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 
 @app.teardown_appcontext
-def teardown_appcontext(self):
-    """
-    declaring a method to handle @app.teardown_appcontext
-    what is called storage.close
-    in order to close the appeal
-    """
+def teardown(exception):
+    """Closes session"""
     storage.close()
 
 
 @app.errorhandler(404)
-def error_404(error):
-    """
-    handler for 404 errors that returns a JSON-formatted 404 status code
-    response. The content should be: "error": "Not found"
-    """
-
-    error = {"error": "Not found"}
-    return make_response(jsonify(error), 404)
+def errorhandler(error):
+    """Returns a JSON-formated status code for errors"""
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == "__main__":
-    host = get("HBNB_API_HOST", "0.0.0.0")
-    port = get("HBNB_API_PORT", "5000")
-    app.run(host=host, port=port, debug=True, threaded=True)
+    API_HOST = getenv("HBNB_API_HOST", "0.0.0.0")
+    API_PORT = getenv("HBNB_API_PORT", 5000)
+    app.run(host=API_HOST, port=API_PORT, threaded=True)
