@@ -19,7 +19,7 @@ def app_views_status():
     return jsonify(statusok)
 
 
-@app_views.route("/stats", strict_slashes=False)
+@app_views.route("/status", strict_slashes=False)
 def endpoint():
     """ and endpoint that retrieves the number of each objects by type """
 
