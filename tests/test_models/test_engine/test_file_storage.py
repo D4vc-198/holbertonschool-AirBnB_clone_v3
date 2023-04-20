@@ -106,15 +106,16 @@ test_file_storage.py'])
         self.assertEqual(count + 1, newCount)
         self.assertEqual(countClass + 1, newCountClass)
 
-    class TestFileStorage(unittest.TestCase):
-        """Test the FileStorage class"""
-        @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-        def test_all_returns_dict(self):
-            """Test that all returns the FileStorage.__objects attr"""
-            storage = FileStorage()
-            new_dict = storage.all()
-            self.assertEqual(type(new_dict), dict)
-            self.assertIs(new_dict, storage._FileStorage__objects)
+
+class TestFileStorage(unittest.TestCase):
+    """Test the FileStorage class"""
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_all_returns_dict(self):
+        """Test that all returns the FileStorage.__objects attr"""
+        storage = FileStorage()
+        new_dict = storage.all()
+        self.assertEqual(type(new_dict), dict)
+        self.assertIs(new_dict, storage._FileStorage__objects)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_new(self):
